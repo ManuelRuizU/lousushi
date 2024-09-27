@@ -1,0 +1,102 @@
+<!--Appmenu\templates\index.html -->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+ 
+<style>
+    body {
+        background-image: url("{% static 'img/pizarron.jpg' %}");
+        background-size: cover; 
+        background-attachment: fixed; 
+        background-position: center; 
+        background-repeat: no-repeat; 
+    }
+
+    h1, h2 {
+        color: #FFFFFF;
+    }
+
+    .card-i {
+        box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .card-i:hover {
+        box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
+    }
+
+    .card-pro {
+        padding: 0;
+        border: #f5f3f3;
+        margin: auto;
+        border-radius: 0.1em;
+        transition: transform 0.2s, border-color 0.2s;
+        border: 0.1em solid transparent;
+        overflow: hidden;
+    }
+
+    .button-group {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .accordion-button {
+        text-align: right;
+        margin-left: 50px; 
+    }
+
+    .bi-chevron-double-down {
+        font-size: 2em;
+        color: #2648f4;
+    }
+
+    .custom-background {
+        background-color: #ffffff;
+        width: 100%;
+        height: 100%%; /* Asegura que el ancho sea el mismo que el contenedor */
+    }
+
+    .accordion-body {
+        background-color: #ffffff; /* Fondo blanco para el acordeón */
+    }
+</style>
+
+<div class="container">
+    <h1>Bienvenido a nuestra tienda!</h1>
+
+    {% for subcategoria, productos in subcat_productos.items %}
+        <h2 id="{{ subcategoria.subcategoria_nombre|slugify }}" class="title text-center">{{ subcategoria.subcategoria_nombre }}</h2>
+        <div class="row">
+            {% for producto in productos %}
+                <div class="card-i card-pro col-lg-3 mt-4 mb-3" style="width: 18rem;">
+                    <div class="card" id="card{{ producto.id }}">
+                        <img src="{{ producto.imagen.url }}" class="card-img-top img-container" alt="{{ producto.nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <h4 class="card-title">$ {{ producto.precio }}</h4>
+                            <div class="button-group" style="display: flex; align-items: center;">
+                                <a href="#" class="btn btn-primary px-3" style="color:#FFFFFF; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;" onclick="addToCart('{{ producto.id }}')">
+                                    <i class="bi bi-cart-plus" style="font-size: 24px;"></i>
+                                </a>
+                                
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#plan-detalles{{ producto.id }}" aria-expanded="false" aria-controls="plan-detalles{{ producto.id }}" style="display: flex; align-items: center;">
+                                    <strong>Ver detalles<i class="bi bi-chevron-down" style="font-size: 40px; color: #0d6efd; margin-left: 5px;"></i></strong>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="plan-detalles{{ producto.id }}" class="accordion-body accordion-collapse collapse">
+                        <ul>
+                            <li class="mb-2 custom-background">{{ producto.descripcion }}</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,42 @@
+<!-- Appmenu/boton_carrito.html -->
+
+<!-- Botón flotante del carrito -->
+<button id="carritoBtn" class="btn-carrito-flotante" onclick="abrirCarritoModal()">
+    🛒 Carrito <span id="cart-count">0</span> <!-- Muestra el contador aquí -->
+</button>
+
+<script>
+    // Abrir el modal del carrito
+    function abrirCarritoModal() {
+        const carritoModal = document.getElementById('carritoModal');
+        if (carritoModal) {
+            carritoModal.style.display = 'block';
+            actualizarYRenderizarCarrito(); // Asegúrate de actualizar el carrito cuando lo abres
+        }
+    }
+
+    // Cerrar el modal cuando se hace clic en la "X"
+    document.querySelector('.close').onclick = function() {
+        document.getElementById('carritoModal').style.display = 'none';
+    }
+</script>
+
+<style>
+    .btn-carrito-flotante {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #ff9800;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .btn-carrito-flotante:hover {
+        background-color: #e67e22;
+    }
+</style>

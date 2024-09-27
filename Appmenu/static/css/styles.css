@@ -1,0 +1,526 @@
+/*Appmenu/static/css/styles.css */
+
+
+body {
+  background-image: url("{% static 'img/pizarron.jpg' %}");
+  background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+  background-attachment: fixed; /* Fija la imagen de fondo */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+
+    .btn-carrito-flotante {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #ff9800;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .btn-carrito-flotante:hover {
+        background-color: #e67e22;
+    }
+
+
+
+
+.circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-image: url("{% static 'img/portada.jpeg' %}"); /* Ruta a la imagen en static */
+}
+
+.img-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;  /* Hace la imagen redonda */
+    object-fit: cover;   /* Asegura que la imagen cubra todo el contenedor sin distorsionarse */
+    margin: 5px;         /* Ajusta el espacio alrededor de la imagen */
+}
+
+
+
+/*Appmenu/static/css/styles.css */
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: url("{% static 'img/portada.jpeg' %}"); /* Ruta a la imagen en static */
+}
+
+.img-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;  /* Hace la imagen redonda */
+  object-fit: cover;   /* Asegura que la imagen cubra todo el contenedor sin distorsionarse */
+  margin: 5px;         /* Ajusta el espacio alrededor de la imagen */
+}
+
+
+
+.card-p {
+  padding: 0;
+  margin: auto;
+  border-radius: 2em;
+  transition: transform 0.2s, border-color 0.2s;
+  border: 0.5em solid transparent;
+  overflow: hidden;
+}
+
+.card-p:hover, .card-p.touch-active {
+  cursor: pointer;
+  border-color: #f36805;
+  transform: scale(1.05);
+}
+
+.card {
+  border: none; /* Elimina cualquier borde adicional */
+}
+
+.card-img-top {
+  border-radius: 10px 10px 0 0;
+  height: 200px; /* Fija la altura deseada */
+  object-fit: cover; /* Ajusta la imagen para que cubra el contenedor manteniendo su proporción */
+  width: 100%; /* Asegura que ocupe el 100% del ancho del card */
+}
+
+
+
+/* Estilos para el botón "Comprar" */
+.button-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-comprar {
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  flex-shrink: 0; /* Evita que el botón se encoja si hay poco espacio */
+  transition: background-color 0.3s ease;
+}
+
+.btn-comprar:hover {
+  background-color: #28a745;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.d-flex {
+  gap: 10px; /* Añade espacio entre los botones */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 5px solid rgba(6, 230, 219, 0.5);
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semitransparente */
+}
+
+.modal-content {
+  background-color: #fff; /* Fondo blanco */
+  margin: 15% auto; /* Centrando el modal verticalmente */
+  padding: 20px;
+  border: 5px solid rgba(6, 230, 219, 0.5);
+  width: 100%;
+  max-width: 25rem; /* Ancho máximo */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+
+/* Carrito del Index */
+
+header {
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ccc;
+}
+
+header h1 {
+  margin: 0;
+}
+
+.products, .cart {
+  float: left;
+  width: 45%;
+  margin: 2%;
+  padding: 1%;
+  border: 1px solid #ccc;
+}
+
+.product {
+  margin-bottom: 20px;
+}
+
+.cart {
+  float: right;
+}
+
+#cart-items {
+  margin-bottom: 20px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cart-item span {
+  margin: 0 10px;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.cart-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.cart-button span {
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modal-button {
+  text-align: right;
+  margin-left: 50px; /* Ajusta este valor según sea necesario */
+}
+
+
+.modal_cart {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+  padding-top: 60px; 
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Card Index.html */
+
+.card-i {
+  box-shadow: 0px 0px 2px rgba(0, 0, 255, 0.5); /* Sombra difuminada en color azul */
+  transition: box-shadow 0.3s ease-in-out; /* Efecto de transición suave */
+}
+
+.card-i:hover {
+  box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.7); /* Sombra más acentuada al hacer hover */
+}
+
+
+
+
+/* Estilos para el botón "Comprar" */
+.button-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-comprar {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    flex-shrink: 0; /* Evita que el botón se encoja si hay poco espacio */
+    transition: background-color 0.3s ease;
+}
+
+.btn-comprar:hover {
+    background-color: #28a745;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.d-flex {
+    gap: 10px; /* Añade espacio entre los botones */
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: 5px solid rgba(6, 230, 219, 0.5);
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semitransparente */
+}
+
+.modal-content {
+    background-color: #fff; /* Fondo blanco */
+    margin: 15% auto; /* Centrando el modal verticalmente */
+    padding: 20px;
+    border: 5px solid rgba(6, 230, 219, 0.5);
+    width: 100%;
+    max-width: 25rem; /* Ancho máximo */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+
+/* Carrito del Index */
+
+header {
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  header h1 {
+    margin: 0;
+  }
+  
+  .products, .cart {
+    float: left;
+    width: 45%;
+    margin: 2%;
+    padding: 1%;
+    border: 1px solid #ccc;
+  }
+  
+  .product {
+    margin-bottom: 20px;
+  }
+  
+  .cart {
+    float: right;
+  }
+  
+  #cart-items {
+    margin-bottom: 20px;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .cart-item span {
+    margin: 0 10px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .cart-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cart-button span {
+    margin-left: 5px;
+    font-size: 16px;
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.modal-button {
+    text-align: right;
+    margin-left: 50px; /* Ajusta este valor según sea necesario */
+}
+
+  
+  .modal_cart {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px; 
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Card Index.html */
+
+  .card-i {
+    box-shadow: 0px 0px 2px rgba(0, 0, 255, 0.5); /* Sombra difuminada en color azul */
+    transition: box-shadow 0.3s ease-in-out; /* Efecto de transición suave */
+}
+
+.card-i:hover {
+    box-shadow: 0px 0px 5px rgba(0, 0, 255, 0.7); /* Sombra más acentuada al hacer hover */
+}
+
+/* Carrito Modal */
+.carrito-modal {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: white;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
+  transition: 0.5s;
+  z-index: 999;
+}
+
+.carrito-modal.open {
+  width: 300px; /* Tamaño del carrito al abrirse */
+}
+
+.carrito-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.carrito-totales, .carrito-actions {
+  margin-top: 20px;
+}
+
+.carrito-actions .btn {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* END Card Index.html */
+
+.carrito-modal {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carrito-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Ancho del modal */
+}

@@ -1,0 +1,30 @@
+<!-- Appmenu/home.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Bienvenido a nuestra tienda!</h1>
+
+    {% for subcategoria, productos in subcat_productos.items %}
+        <h2 id="{{ subcategoria.subcategoria_nombre|slugify }}" class="title text-center">{{ subcategoria.subcategoria_nombre }}</h2>
+        <div class="row">
+            {% block card %}
+              {%include 'card.html'%}
+            {% endblock %}
+        </div>
+    {% endfor %}
+</div>
+
+
+
+{% include 'carrito.html' %}
+
+{% include 'boton_carrito.html' %}
+
+
+{% endblock %}
+
+
+
+

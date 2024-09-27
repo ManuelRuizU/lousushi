@@ -1,0 +1,33 @@
+
+<!-- Appmenu/templates/carrito.html -->
+{% load static %}
+<div id="carritoModal" class="carrito-modal">
+    <div class="carrito-content">
+        <span class="close">&times;</span>
+        <h2>Tu Carrito de Compras</h2>
+
+        <!-- Contenedor de los items del carrito -->
+        <ul id="cart-items">
+            <!-- Los elementos se llenarán dinámicamente desde carrito.js -->
+        </ul>
+
+        <!-- Elementos para mostrar el total y la cantidad del carrito -->
+        <div class="carrito-totales">
+            <p>Descuento: $<span id="descuento">0</span></p>
+            <p>Envío: $<span id="valor_envio">0</span></p>
+            <p><strong>Total: $<span id="total">0</span></strong></p>
+        </div>
+
+        <div class="carrito-actions">
+            <button class="btn btn-success">Enviar <i class="bi bi-whatsapp"></i></button>
+            <button class="btn btn-danger" id="vaciarCarrito">Vaciar Carrito</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/carrito.js' %}"></script>
+
+
+
+
+
