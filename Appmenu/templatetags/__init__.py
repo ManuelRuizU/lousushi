@@ -1,0 +1,1 @@
+# lourdessushi/Appmenu/templatetags/__init__.py

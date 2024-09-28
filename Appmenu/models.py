@@ -141,6 +141,7 @@ class Carrito(models.Model):
     valor_envio = models.IntegerField()
     completo = models.BooleanField(default=False)  # Si el pedido ha sido completado
     cupon = models.ForeignKey('CuponDescuento', on_delete=models.SET_NULL, null=True, blank=True)
+    
 
     def __str__(self):
         return f"Pedido de {self.nombre_comprador} {self.apellido_comprador}"
