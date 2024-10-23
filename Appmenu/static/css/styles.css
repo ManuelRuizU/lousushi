@@ -1,32 +1,8 @@
 /*Appmenu/static/css/styles.css */
 
 
-body {
-  background-image: url("{% static 'img/pizarron.jpg' %}");
-  background-size: cover; /* Asegura que la imagen cubra todo el fondo */
-  background-attachment: fixed; /* Fija la imagen de fondo */
-  background-position: center; /* Centra la imagen */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
-}
 
 
-    .btn-carrito-flotante {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #ff9800;
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 50%;
-        font-size: 24px;
-        cursor: pointer;
-        z-index: 1000;
-    }
-
-    .btn-carrito-flotante:hover {
-        background-color: #e67e22;
-    }
 
 
 
@@ -76,21 +52,28 @@ body {
   margin: 5px;         /* Ajusta el espacio alrededor de la imagen */
 }
 
+/* Comienzo de estilos para card.html */
 .tarjeta-producto {
   background-color: #dcdada;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 100%;
-  max-width: 300px;
+  width: 100%; /* Usa todo el ancho disponible */
+  max-width: 300px; /* Puedes ajustar esto según sea necesario */
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+  transform: scale(1.03); /* Efecto de aumento al pasar el ratón */
 }
 
 .imagen-producto {
-  width: 300px; /* Ancho fijo */
+  width: 100%; /* Se ajusta automáticamente al ancho del contenedor */
   height: 200px; /* Altura fija */
   overflow: hidden; /* Oculta el exceso de imagen */
-  background-color: #fffefe; /* Fondo gris claro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,93 +85,60 @@ body {
   object-fit: cover; /* Ajusta la imagen para que cubra el contenedor */
 }
 
-.imagen-producto {
-  height: 200px;
-  overflow: hidden;
-}
-
-.imagen-producto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.precio-producto {
-  padding: 20px;
-}
-
 .informacion-productos {
-  padding: 8px;
+  padding: 10px;
 }
 
 .titulo-producto {
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  text-align: center; /* Centrado del título */
 }
 
-.precio-producto {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 20px;
+.precio-productos {
+  color: #030303;
+  text-align: center; /* Centrado del precio */
+  margin-bottom: 15px; /* Espaciado inferior */
 }
 
 .botones-acciones {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Espaciado entre botones */
   align-items: center;
 }
 
 .botones-acciones button {
-  padding: 10px 20px;
+  padding: 10px;
   border-radius: 5px;
   border: none;
   cursor: pointer;
   font-size: 16px;
-}
-
-.botones-acciones button:hover {
-  transform: scale(1.05);
-}
-
-.btn-info {
-  background-color: #17a2b8;
-  color: #fff;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-
-/* Estilos para el botón "Comprar" */
-.button-group {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-comprar {
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 5px;
-  background-color: #28a745;
-  text-decoration: none;
-  flex-shrink: 0; /* Evita que el botón se encoja si hay poco espacio */
   transition: background-color 0.3s ease;
+  flex: 1; /* Asegura que los botones ocupen el mismo ancho */
+  margin: 0 5px; /* Espaciado horizontal entre botones */
 }
 
-.btn-comprar:hover {
-  text-decoration-line: none;
-  background-color: #a72828;
+.botones-acciones .btn-info {
+  background-color: #17a2b8; /* Color del botón de información */
   color: #fff;
-  transform: scale(1.05);
 }
 
-.d-flex {
-  gap: 10px; /* Añade espacio entre los botones */
+.botones-acciones .btn-info:hover {
+  background-color: #138496; /* Color más oscuro al pasar el ratón */
 }
 
+.botones-acciones .btn-success {
+  background-color: #28a745; /* Color del botón de agregar al carrito */
+  color: #fff;
+}
+
+.botones-acciones .btn-success:hover {
+  background-color: #218838; /* Color más oscuro al pasar el ratón */
+}
+/* Fin de estilos para card.html */
+
+
+/*  estilos para modal.html */
 .modal {
   display: none;
   position: fixed;
@@ -197,20 +147,125 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-  border: 5px solid rgba(6, 230, 219, 0.5);
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semitransparente */
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro más pronunciado */
 }
 
 .modal-content {
-  background-color: #fff; /* Fondo blanco */
-  margin: 15% auto; /* Centrando el modal verticalmente */
+  background-color: #fff;
+  margin: 10% auto; /* Centrando el modal verticalmente con un poco menos de margen */
   padding: 20px;
   border: 5px solid rgba(6, 230, 219, 0.5);
+  width: 90%; /* Ancho adaptable */
+  max-width: 25rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+  border-radius: 10px;
+  animation: fadeIn 0.3s; /* Animación al aparecer */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Mejora en el estilo del texto */
+h2 {
+  font-size: 1.5rem; /* Tamaño del título */
+  margin-bottom: 15px; /* Espacio debajo del título */
+}
+
+p {
+  font-size: 1rem; /* Tamaño del contenido */
+  line-height: 1.5; /* Altura de línea para mejorar la legibilidad */
+}
+
+/* Fin de estilos para modal.html */
+
+
+/* Estilos para el sidebar del carrito */
+.sidebar {
+  height: 100%;
+  width: 300px; /* Ancho del sidebar */
+  position: fixed;
+  top: 0;
+  right: -300px; /* Fuera de la pantalla por defecto */
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease; /* Transición suave solo para la posición */
+  z-index: 1000;
+}
+
+.sidebar-abierto {
+  right: 0; /* Desplazar el sidebar a la vista */
+}
+
+.sidebar-contenido {
+  padding: 15px;
+}
+
+.sidebar h4 {
+  margin-top: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar button {
   width: 100%;
-  max-width: 25rem; /* Ancho máximo */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
-  border-radius: 10px; /* Bordes redondeados */
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background-color: #3e8e41;
 }
 
 
+
+/* Comienzo de los Estilos para boton_carrito.html */
+/* Estilo para el botón flotante del carrito */
+.btn-carrito-flotante {
+  position: fixed; /* Fija la posición en la pantalla */
+  bottom: 20px; /* Espacio desde la parte inferior */
+  right: 20px; /* Espacio desde el lado derecho */
+  background-color: #28a745; /* Color de fondo verde */
+  color: white; /* Color del texto */
+  padding: 15px 20px; /* Espaciado interno */
+  border-radius: 50px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
+  font-size: 16px; /* Tamaño de fuente */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  transition: background-color 0.3s ease; /* Transición suave para el color */
+}
+
+/* Cambia el color al pasar el ratón sobre el botón */
+.btn-carrito-flotante:hover {
+  background-color: #218838; /* Color más oscuro en hover */
+}
+
+/* Estilo para el contador de productos */
+.contador {
+  background-color: red; /* Fondo rojo */
+  color: white; /* Texto blanco */
+  border-radius: 50%; /* Forma circular */
+  padding: 5px 10px; /* Espaciado */
+  font-size: 14px; /* Tamaño de texto */
+  margin-left: 10px; /* Espaciado entre el texto y el número */
+}
+/* Fin para Estilos de boton_carrito.html */

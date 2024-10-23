@@ -1,5 +1,52 @@
 <!-- navbar.html -->
 {% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      {% if logo_emprendimiento %}
+        <img class="img-circle" src="{{ logo_emprendimiento }}" alt="{{ nombre_emprendimiento }}" style="width: 100px; height: 100px;">
+      {% else %}
+        Sin logo
+      {% endif %}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if categories %}
+            {% for category in categories %}
+            <li class="nav-item dropdown text-center" style="margin-right: 15px;">
+                <a class="nav-link dropdown-toggle" href="#categoria-{{ category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if category.imagen %}
+                        <img class="img-circle" src="{{ category.imagen.url }}" alt="{{ category.categoria_nombre }}" style="width: 80px; height: 80px; border-radius: 50%; display: block; margin: 0 auto;">
+                    {% endif %}
+                    <span style="display: block; margin-top: 5px;">{{ category.categoria_nombre }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% if category.subcategorias.all %}
+                        {% for subcategory in category.subcategorias.all %}
+                        <!-- Enlace a la sección de la subcategoría -->
+                        <li><a class="dropdown-item" href="#subcategoria-{{ subcategory.id }}">{{ subcategory.subcategoria_nombre }}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        <li><span class="dropdown-item">No hay subcategorías</span></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endfor %}
+        {% else %}
+            <p>No hay categorías disponibles.</p>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
 
 <!--
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -52,6 +99,8 @@
 </nav>
 -->
 
+
+<!--
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
@@ -95,7 +144,7 @@
     </div>
   </nav>
 
-<!--
+
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <div class="circle"><img class="img-circle " src="{% static 'img/portada.jpeg' %}" alt="Promos"></div>

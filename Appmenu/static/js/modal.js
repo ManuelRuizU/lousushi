@@ -1,4 +1,5 @@
 //Appmenu/static/js/modal.js
+
 document.addEventListener("DOMContentLoaded", function() {
     // Obtener el modal y el botón de cerrar
     var modal = document.getElementById("myModal");
@@ -13,27 +14,27 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             // Cuando el usuario hace clic en cualquier parte fuera del modal, ocultar el modal
-            window.onclick = function(event) {
-                if (event.target == modal) {
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
                     modal.style.display = "none";
                 }
-            };
+            });
         }
 
-        // Función para mostrar el modal con título, contenido y precio específicos
-        window.showModal = function(title, content, publicPrice) {
+        // Función para mostrar el modal con título y contenido específicos
+        window.showModal = function(title, content) {
             var modalTitle = modal.querySelector("#modal-title");
             var modalContent = modal.querySelector("#modal-content");
-            var modalPublicPrice = modal.querySelector("#modal-precio"); // Corregido aquí
-
-            if (modalTitle && modalContent && modalPublicPrice) {
-                modalTitle.textContent = title;
-                modalContent.textContent = content;
-                modalPublicPrice.textContent = "Precio público: $" + publicPrice;
+        
+            if (modalTitle && modalContent) {
+                modalTitle.textContent = title || "Sin título";
+                modalContent.textContent = content || "Sin contenido";
+                modal.style.display = "block";
+            } else {
+                console.error("Elementos del modal no encontrados.");
             }
-
-            modal.style.display = "block";
         };
+        
     }
 });
 

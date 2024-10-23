@@ -1,0 +1,22 @@
+<!-- Appmenu/templates/carrito_siderbar.html -->
+<!-- Appmenu/templates/carrito_siderbar.html -->
+<div id="sidebar-carrito" class="sidebar">
+    <div class="sidebar-contenido">
+        <span class="cerrar-sidebar">&times;</span>
+        <h4>Carrito de Compras</h4>
+        <div id="emprendimiento-nombre"></div> <!-- Aquí mostraremos el nombre del emprendimiento -->
+        <div id="carrito-items">
+            <ul>
+                {% for item in carrito_items %}
+                  <li>{{ item.producto.nombre }} x {{ item.cantidad }}</li>
+                {% endfor %}
+              </ul>
+        </div>
+        <div class="carrito-total">
+            <p>Total: ${} {{ carrito.get_total }}</p>
+            <button id="enviar-pedido">Enviar Pedido</button>
+        </div>
+    </div>
+</div>
+
+

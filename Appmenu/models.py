@@ -1,13 +1,19 @@
-# models.py
 from django.contrib.auth.models import User
 from django.db import models
-import uuid
 from django.utils import timezone
+import uuid
+
+# Constantes
+METODOS_PAGO = [
+    ('EFECTIVO', 'Efectivo'),
+    ('TRANSFERENCIA', 'Transferencia bancaria'),
+    ('TARJETA_CREDITO', 'Tarjeta de crédito'),
+    ('TARJETA_DEBITO', 'Tarjeta de débito'),
+    ('PAGO_EN_LINEA', 'Pago en línea'),
+]
 
 
-# Modelos existentes
-
-class Emprendimiento(models.Model):
+class Emprendedor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rut = models.CharField(max_length=10, blank=True)
     direccion = models.ForeignKey('Direccion', on_delete=models.CASCADE, blank=True, null=True)
@@ -17,6 +23,33 @@ class Emprendimiento(models.Model):
 
     def __str__(self):
         return f"{self.user.id} {self.user}"
+
+class Emprendimiento(models.Model):
+    # Mantengo UUIDField para Emprendimiento porque puede estar expuesto públicamente
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    emprendedor = models.ForeignKey(Emprendedor, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=100)
+    logo = models.ImageField(upload_to='logos', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.nombre} - {self.emprendedor}"
+    
+    
+class Sector(models.Model):
+    nombre = models.CharField(max_length=100)
+    latitud = models.DecimalField(max_digits=9, decimal_places=6)
+    longitud = models.DecimalField(max_digits=9, decimal_places=6)
+    radio_maximo = models.FloatField()
+    costo_base = models.DecimalField(max_digits=10, decimal_places=2)
+    coeficiente_distancia = models.DecimalField(max_digits=10, decimal_places=2)
+    dificultad = models.IntegerField(choices=[(1, 'Muy fácil'), (2, 'Fácil'), (3, 'Medio'), (4, 'Difícil'), (5, 'Muy difícil')], default=3)
+    
+    def calcular_costo_envio(self, distancia):
+        # Calcula el costo de envío basado en la distancia y otros factores
+        costo_base = self.costo_base
+        coeficiente = self.coeficiente_distancia
+        costo_adicional = distancia * coeficiente
+        return costo_base + costo_adicional
 
 class Pais(models.Model):
     nombre = models.CharField(max_length=100)
@@ -72,6 +105,7 @@ class Direccion(models.Model):
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE, related_name='direcciones_comuna')
     calle = models.ForeignKey(Calle, on_delete=models.CASCADE, related_name='direcciones_calle')
     departamento = models.CharField(max_length=10, blank=True)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, related_name='direcciones')
 
     def __str__(self):
         if self.departamento:
@@ -80,7 +114,9 @@ class Direccion(models.Model):
             return f"{self.calle.nombre} {self.calle.numero}, {self.comuna.nombre}, {self.region.nombre}"
 
 class Categoria(models.Model):
+    emprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name='categorias')
     categoria_nombre = models.CharField(max_length=100)
+    imagen = models.ImageField(upload_to='img', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.categoria_nombre:
@@ -92,6 +128,7 @@ class Categoria(models.Model):
 
 class SubCategoria(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='subcategorias')
+    emprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name='subcategorias')
     subcategoria_nombre = models.CharField(max_length=100)
 
     def save(self, *args, **kwargs):
@@ -103,8 +140,11 @@ class SubCategoria(models.Model):
         return f"{self.subcategoria_nombre} ({self.categoria.categoria_nombre})"
 
 class Producto(models.Model):
+    # Mantengo UUIDField en Producto para seguridad y exposición pública
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='productos')
     subcategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE, related_name='productos')
+    emprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name='productos')
     imagen = models.ImageField(upload_to='img', blank=True, null=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField(max_length=1000)
@@ -119,53 +159,46 @@ class Producto(models.Model):
         return f"{self.nombre} - {self.precio} (Categoria: {self.categoria}, Subcategoria: {self.subcategoria})"
 
 
-class Sector(models.Model):
-    nombre = models.CharField(max_length=100)
-    latitud = models.DecimalField(max_digits=9, decimal_places=6)
-    longitud = models.DecimalField(max_digits=9, decimal_places=6)
-    radio_maximo = models.FloatField()
-    costo_base = models.DecimalField(max_digits=10, decimal_places=2)
-    coeficiente_distancia = models.DecimalField(max_digits=10, decimal_places=2)
-    dificultad = models.IntegerField(choices=[(1, 'Muy fácil'), (2, 'Fácil'), (3, 'Medio'), (4, 'Difícil'), (5, 'Muy difícil')], default=3)
 
-# Modelo Carrito
 class Carrito(models.Model):
+    # Mantengo UUIDField en Carrito para seguridad y protección de privacidad
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    emprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name='carritos')
     nombre_comprador = models.CharField(max_length=100)
     apellido_comprador = models.CharField(max_length=100)
-    direccion_despacho = models.CharField(max_length=255)
-    telefono_contacto = models.CharField(max_length=20)
-    nota = models.TextField(max_length=500, blank=True, default='')
+    direccion_despacho = models.ForeignKey(Direccion, null=True, on_delete=models.CASCADE)
+    telefono_contacto = models.CharField(max_length=20) 
+    nota = models.TextField(blank=True, default='')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     descuento = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    valor_envio = models.IntegerField()
-    completo = models.BooleanField(default=False)  # Si el pedido ha sido completado
+    valor_envio = models.DecimalField(max_digits=10, decimal_places=1, default=0.0)
+    completo = models.BooleanField(default=False)
     cupon = models.ForeignKey('CuponDescuento', on_delete=models.SET_NULL, null=True, blank=True)
-    
+    metodo_pago = models.CharField(max_length=50, choices=METODOS_PAGO, default='EFECTIVO')
 
     def __str__(self):
-        return f"Pedido de {self.nombre_comprador} {self.apellido_comprador}"
+        return f"Pedido de {self.id} {self.nombre_comprador} {self.apellido_comprador}"
 
     def get_total(self):
         total_items = sum(item.get_total_item() for item in self.items.all())
         total = total_items - self.descuento + self.valor_envio
-
-        # Aplicar descuento del cupón si existe y es válido
         if self.cupon and self.cupon.es_valido():
             total = self.cupon.aplicar_descuento(total, self.valor_envio)
-        
         return total
 
+
 class CarritoItem(models.Model):
+    # No se necesita UUID para CarritoItem, ya que es un modelo de relación interna
     carrito = models.ForeignKey(Carrito, related_name='items', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.cantidad} x {self.producto.nombre}"
+        return f"{self.producto.nombre} - Cantidad: {self.cantidad}"
 
     def get_total_item(self):
         return self.cantidad * self.producto.precio
+
 
 # Modelo Cupon de Descuento
 

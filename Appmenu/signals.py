@@ -12,3 +12,5 @@ def enviar_whatsapp_despues_de_guardar(sender, instance, **kwargs):
         # Aquí puedes enviar el enlace a WhatsApp o realizar alguna otra acción
         print(f"Enlace generado: {enlace}")
         # Ejemplo: enviar el enlace por email, o enviar un request a una API para enviar el mensaje por WhatsApp
+
+

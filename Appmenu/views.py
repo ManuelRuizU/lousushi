@@ -1,87 +1,120 @@
-# Appmenu/views.py
+# lourdessushi/Appmenu/views.py
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from .models import Producto, Carrito, CarritoItem
-from .services import obtener_productos_por_subcategoria
-from django.views.decorators.http import require_POST
-
-def index(request):
-    producto_abierto_id = request.GET.get('producto_abierto_id', None)
-    context = {
-        'subcat_productos': obtener_productos_por_subcategoria(),
-        'producto_abierto_id': producto_abierto_id,
-    }
-    return render(request, 'index.html', context)
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import Emprendedor, Emprendimiento, Producto, Carrito, CarritoItem, CuponDescuento, Categoria, SubCategoria
+from .services import obtener_productos_por_subcategoria, agregar_producto_al_carrito_db, obtener_carrito_no_autenticado
+from django.views.decorators.http import require_http_methods
+import uuid
 
 def home(request):
+    emprendimiento = Emprendimiento.objects.first()
+    if emprendimiento:
+        nombre_emprendimiento = emprendimiento.nombre
+        id_emprendimiento = emprendimiento.id
+        logo_emprendimiento = emprendimiento.logo.url if emprendimiento.logo else None
+    else:
+        nombre_emprendimiento = "Nombre por defecto"
+        id_emprendimiento = "id por defecto"
+        logo_emprendimiento = None
     subcat_productos = obtener_productos_por_subcategoria()
+    carrito_items = CarritoItem.objects.all()
+    totales = [item.producto.precio * item.cantidad for item in carrito_items]
+    total_general = sum(totales)
+    categories = Categoria.objects.all()
     context = {
-        'subcat_productos': subcat_productos
+        'nombre_emprendimiento': nombre_emprendimiento,
+        'id_emprendimiento': id_emprendimiento,
+        'logo_emprendimiento': logo_emprendimiento,
+        'subcat_productos': subcat_productos,
+        'carrito_items': carrito_items,
+        'totales': totales,
+        'total_general': total_general,
+        'categories': categories,
     }
     return render(request, 'home.html', context)
+
+def category_detail(request, category_id):
+    category = get_object_or_404(Categoria, id=category_id)
+    context = {
+        'category': category,
+    }
+    return render(request, 'category_detail.html', context)
+
+def subcategory_detail(request, subcategory_id):
+    subcategory = get_object_or_404(SubCategoria, id=subcategory_id)
+    return render(request, 'subcategory_detail.html', {'subcategory': subcategory})
 
 def login_view(request):
     return render(request, "registration/login.html", {})
 
-def get_or_create_carrito(request):
-    carrito_id = request.session.get('carrito_id')
-    if carrito_id:
-        return get_object_or_404(Carrito, id=carrito_id)
+def obtener_emprendimiento_id(request):
+    emprendimiento = Emprendimiento.objects.first()
+    emprendimiento_id = emprendimiento.id if emprendimiento else None
+    return JsonResponse({'emprendimiento_id': emprendimiento_id})
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def crear_carrito(request, emprendimiento_id):
+    if request.method == 'POST':
+        nuevo_carrito = Carrito.objects.create(emprendimiento_id=emprendimiento_id)
+        return JsonResponse({'id': nuevo_carrito.id})
     else:
-        carrito = Carrito.objects.create()
-        request.session['carrito_id'] = str(carrito.id)
-        return carrito
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-def carrito_view(request):
-    carrito = get_or_create_carrito(request)
-    return render(request, 'carrito.html', {'carrito': carrito})
+def obtener_productos(request):
+    productos = Producto.objects.all().values('id', 'nombre', 'precio')
+    return JsonResponse(list(productos), safe=False)
 
-@require_POST
 def agregar_al_carrito(request):
-    producto_id = request.POST.get('producto_id')
-    cantidad = int(request.POST.get('cantidad', 1))
+    print(request.body)
+    try:
+        data = json.loads(request.body)
+        producto_id = data.get('productoId')
+        cantidad = data.get('cantidad')
 
-    # Obtener el carrito actual o crear uno nuevo
-    carrito = get_or_create_carrito(request)
+        if not isinstance(cantidad, int) or cantidad <= 0:
+            return JsonResponse({'error': 'Cantidad inválida'}, status=400)
 
-    # Buscar el producto
-    producto = get_object_or_404(Producto, id=producto_id)
+        try:
+            producto = Producto.objects.get(id=producto_id)
+        except Producto.DoesNotExist:
+            return JsonResponse({'error': 'Producto no encontrado'}, status=404)
 
-    # Buscar si el producto ya está en el carrito
-    carrito_item, creado = CarritoItem.objects.get_or_create(carrito=carrito, producto=producto)
+        emprendimiento_id = producto.emprendimiento.id
 
-    if not creado:
-        # Si ya existe, solo actualizamos la cantidad
-        carrito_item.cantidad += cantidad
-    else:
+        carrito = Carrito.objects.get_or_create(emprendimiento_id=emprendimiento_id)
+        carrito_item, creado = CarritoItem.objects.get_or_create(carrito=carrito, producto=producto)
         carrito_item.cantidad = cantidad
+        carrito_item.save()
 
-    carrito_item.save()
-
-    # Retornar una respuesta en JSON para actualizar el frontend
-    return JsonResponse({
-        'mensaje': 'Producto agregado al carrito',
-        'total_items': carrito.items.count()
-    })
-
-# Appmenu/views.py
-
-from django.http import JsonResponse
+        return JsonResponse({'mensaje': 'Producto agregado al carrito.', 'carrito_id': carrito.id}, status=201)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'JSON inválido'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def obtener_carrito(request):
-    carrito = get_or_create_carrito(request)
-    items = []
-    total = 0
-
-    for item in carrito.items.all():
-        items.append({
-            'producto': {
-                'nombre': item.producto.nombre,
-                'precio': item.producto.precio,
-            },
+    carrito = obtener_carrito_no_autenticado(request)
+    items = [
+        {
+            'nombre': item.producto.nombre,
             'cantidad': item.cantidad,
-        })
-        total += item.producto.precio * item.cantidad
+            'total': item.get_total_item()
+        }
+        for item in carrito.items.all()
+    ]
+    return JsonResponse({'items': items})
 
-    return JsonResponse({'items': items, 'total': total, 'valor_envio': carrito.valor_envio})
+def carrito_view(request):
+    carrito = obtener_carrito_no_autenticado(request)
+    carrito_items = carrito.items.all()
+    context = {
+        'carrito': carrito,
+        'carrito_items': carrito_items,
+    }
+    return render(request, 'carrito_siderbar.html', context)
+
 

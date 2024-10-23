@@ -1,28 +1,38 @@
-{% load static %}
+<!-- Appmenu/templates/card.html -->
 {% load custom_filters %}
 
-{% block 'modal' %}
-{% include 'modal.html' %}
-{% endblock %}
-
+<!-- Appmenu/templates/card.html -->
 <div class="col-sm-6 mt-4 mb-3">
-    <div class="tarjeta-producto" style="width: 16rem;">
-        <div class="informacion-productos">
-            <h2 class="titulo-producto" style="text-align: center;">{{ producto.nombre }}</h2>
-        </div>
+    <div class="tarjeta-producto producto" style="width: 16rem;">
         <div class="imagen-producto">
             <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
         </div>
-        <div class="precio-producto">
-            <h2 class="precio-producto" style="font-weight: bold;">Valor: $ {{ producto.precio|punto_miles }}</h2>
-            <!-- Botón de información -->
-            <button type="button" class="btn btn-info" onclick="showModal('{{ producto.nombre }}', '{{ producto.descripcion }}', '{{ producto.precio }}')">
-                <i class="bi bi-info-circle"></i> Informacion
-            </button>
-            <!-- Botón de agregar al carrito -->
-            <button type="button" class="btn btn-comprar" onclick="addToCart({{ producto.id }}, '{{ producto.nombre }}', {{ producto.precio }})">
-                <i class="bi bi-cart-plus"></i>
-            </button>
+        <div class="informacion-productos">
+            <h5 class="titulo-producto">{{ producto.nombre }}</h5>
+            <h4 class="precio-productos">{{ producto.precio|punto_miles }}</h4>
+            <div class="botones-acciones">
+                <!-- Botón de información -->
+                <button type="button" class="btn btn-info" 
+                    onclick="showModal('{{ producto.nombre|escapejs }}', '{{ producto.descripcion|escapejs }}')">
+                    <i class="bi bi-info-circle"></i> Info
+                </button>
+                <!-- Botón de agregar al carrito -->
+                {% if id_emprendimiento %}
+                <button 
+                    type="button"
+                    class="btn btn-success agregar-flotante"
+                    id="boton-agregar-carrito-{{ id_emprendimiento }}"
+                    data-emprendimiento-id="{{ id_emprendimiento }}"
+                    data-producto-id="{{ producto.id }}"
+                    data-producto-nombre="{{ producto.nombre }}"
+                    data-producto-precio="{{ producto.precio }}"
+                >
+                    <i class="bi bi-bag-plus-fill"></i>
+                </button>
+                {% else %}
+                <p>Emprendimiento no disponible.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

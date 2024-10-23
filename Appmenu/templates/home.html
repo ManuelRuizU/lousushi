@@ -1,31 +1,37 @@
-<!-- Appmenu/home.html -->
+<!-- Appmenu/templates/home.html -->
 {% extends "base.html" %}
 {% load static %}
+{% load navbar_tags %}
 
 {% block content %}
-<div class="container">
-    <h1>Bienvenido a nuestra tienda!</h1>
+<div id="categoria-{{ category.id }}">
+    <div class="container">
+        <h1>{{ nombre_emprendimiento }}</h1>
+        <h2>{{ id_emprendimiento }}</h2>
+        <h1>Bienvenido a nuestra tienda!</h1>
+    
+        {% for subcategoria, productos in subcat_productos.items %}
+            <h2 id="subcategoria-{{ subcategoria.id }}" class="title text-center">{{ subcategoria.subcategoria_nombre }}</h2>
+            <div class="row">
+                {% for producto in productos %}
+                <div class="col-md-3">
+                
+                {% include "card.html" with emprendimiento=emprendimiento %}
 
-    {% for subcategoria, productos in subcat_productos.items %}
-        <h2 id="{{ subcategoria.subcategoria_nombre|slugify }}" class="title text-center">{{ subcategoria.subcategoria_nombre }}</h2>
-        <div class="row">
-            {% for producto in productos %}
-            <div class="col-md-4">
-                {% include 'card.html' with producto=producto %}
+                </div>
+                {% endfor %}
             </div>
         {% endfor %}
-        </div>
-    {% endfor %}
+    </div>
 </div>
 
-
-
-{% include 'carrito.html' %}
-
 {% include 'boton_carrito.html' %}
-
-
+<!-- Incluir el modal de los producto -->
+{% include 'modal.html' %}%
+<!-- Incluir el modal del carrito -->
+{% include 'carrito_siderbar.html' %}
 {% endblock %}
+
 
 
 
